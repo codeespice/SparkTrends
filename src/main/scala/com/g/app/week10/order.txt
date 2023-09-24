@@ -1,0 +1,21 @@
+Spark BroadCastVariable
+1. val boringWords = sc.broadcast(loadBoringData())
+        store the broadcast variable , i.e shared across all the nodes
+            a. this is helpful to join
+            b.Can be used to reference data
+2.flatMapValues(x=>x.split(" "))
+        1. if sentence has multiple words "hello how are you ?" , you can use flat map to split them and join them
+        for the same key
+3. reduceByKey((x,y)=>x+y)
+        1. Based on the key you can reduce all the values i.e (good,23), (good,26) => good(49)
+
+4. map(x=>(x.split(",")(10).toFloat,x.split(",")(0)))
+    1. You can use split in the map and get the key value pair as well
+
+
+Accumulator
+1. A shared variable that all the nodes  can  update the counter .Its kept in driver machine
+2.Executors cannot read the value , but can update the value -> same as counters in the MapReduce
+
+1. Accumulator-> single copy on driver machine
+2. broadcast variable -> separate copy in each machine
