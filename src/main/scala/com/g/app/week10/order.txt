@@ -19,3 +19,25 @@ Accumulator
 
 1. Accumulator-> single copy on driver machine
 2. broadcast variable -> separate copy in each machine
+
+
+
+Narrow Transformation : No Shuffling is required
+    1. map
+    2.flatmap
+    3.Filter
+
+
+Wide Transformation: Shuffling is required
+    1.reduceByKey
+
+
+ Stage :
+    1. marked by shuffle boundaries
+        when ever we encounter new shuffle( wide transform) spark creates stage
+           total number of stages = basic stage(1) + number of new shuffles
+           eg 3 suffles => 1+ 3 = 4 stages
+
+Difference between reduce by key and reduce
+1.reducebykey -> transformation (wide)
+2.reduce -> action
