@@ -42,6 +42,12 @@ Difference between reduce by key and reduce
 1.reducebykey -> transformation (wide)
 2.reduce -> action
 
+1.Number of jobs = NUmber of actions
+2.When ever you use wide transformation a new stage is created
+3.A task corresponds to each partition
+
+groupbykey can lead to out of memory error so never use it
+
 
 groupByKey vs reduceBykey
 
@@ -59,3 +65,18 @@ groupByKey
 4.Shuffle more data and less parallelism
 
 never use groupbyKey if you can use reduceByKey
+
+
+
+
+-----------------------------------------------------------------------
+
+1. Pair Rdd - tuple of 2 elements
+    ("hello",1)
+    ("hi",1)
+    ("hello",1)
+    Transformations like groupByKey,reduceByKey e.t.c
+    Can only work on a pair Rdd
+
+2.Tuple of 2 elements , Is this same as map?
+    No it is not map keys are unique where as tuple is not
