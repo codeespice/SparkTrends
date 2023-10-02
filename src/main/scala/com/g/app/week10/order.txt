@@ -80,3 +80,39 @@ never use groupbyKey if you can use reduceByKey
 
 2.Tuple of 2 elements , Is this same as map?
     No it is not map keys are unique where as tuple is not
+
+3.Rdd.savetext("path")-> save the results to file
+    this is also action like collect
+
+4.when ever you calla action
+    All the transformations from the very beginning are executed
+
+   Action2
+   again all the transformations from the very beginning are executed
+
+
+   So for every action all the transformations are executed
+   Having said that spark optimizes internally  and if two jobs have same transformations
+   spark will reuse the results
+
+-----------------------------------------------------------------------
+
+1.Sc.defaultParallelism -> gives parallelism implemented on the machine
+2.to check number of partitions
+    rdd.getNumPartitions -> gives number of partitions in the data
+3.Default min partitions -> if less than 2 by default it would have 2
+4. Difference between repartition and Coalesce
+    repartition -> if you have 200 machines and your code uses 4 partitions increase the partitions i.e
+    this happens when you have smaller files
+        input.repartition(10) => you will get more parallelization and your code would be fast
+        repartition can increase or decrease number of partitions
+            decrease  -> 1tb -> 8000blocks -. 1000 node cluster ->  after transformations i.e filter you have
+                less since you filter lot of data so in that case its better to reduce the number of partition
+    Coalesce-> it can only decrease the number of partitions but cannot increase
+           rdd.coalesce(4) -> decrease
+           rdd.coalesce(10)-> no change since partitions are decreased
+
+   a. if we want to decrease coalesce is preferred instead of repartition because coalesce
+         reduces shuffling,repartition creates huge shuffling because repartition created full shuffling
+         Coalesce reduces combines partitions with minimum shuffling
+   b.if we want to increase repartition is used
