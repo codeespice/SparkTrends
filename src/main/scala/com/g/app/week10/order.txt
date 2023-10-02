@@ -41,3 +41,21 @@ Wide Transformation: Shuffling is required
 Difference between reduce by key and reduce
 1.reducebykey -> transformation (wide)
 2.reduce -> action
+
+
+groupByKey vs reduceBykey
+
+1. Both are wide transformation
+
+reduceBykey
+1.More working in parallel
+2.less shuffling is required
+3.Local aggrigation happens
+
+groupByKey
+1.Shuffling is required
+2.We donot get local aggrigation
+3.All the key values are sent (shuffled) to another machine
+4.Shuffle more data and less parallelism
+
+never use groupbyKey if you can use reduceByKey
