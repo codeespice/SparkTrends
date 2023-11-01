@@ -62,7 +62,10 @@ DAG is a acyclic graph.
 jobs,stages and tasks
 
 
-
+ -----------------------------------------------------------------------
+Top movies
+1.1000 people should have rated for that movie
+2.Average rating is greater than 4.5
 
 
 
