@@ -116,3 +116,8 @@ never use groupbyKey if you can use reduceByKey
          reduces shuffling,repartition creates huge shuffling because repartition created full shuffling
          Coalesce reduces combines partitions with minimum shuffling
    b.if we want to increase repartition is used
+
+
+
+
+
