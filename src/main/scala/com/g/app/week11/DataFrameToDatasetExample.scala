@@ -1,12 +1,16 @@
 package com.g.app.week11
 
-import org.apache.commons.net.ntp.TimeStamp
+
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.unix_timestamp
+
+import java.sql.Timestamp
 
 
-object DataFrameExample extends App {
+case class OrdersData(order_id:Int, order_date:Timestamp, order_customer_id:Int, order_status:String)
+object DataFrameToDatasetExample extends App {
 
   Logger.getLogger("org").setLevel(Level.ERROR)
   val sparkConf = new SparkConf()
@@ -26,16 +30,13 @@ val spark = SparkSession.builder().
                 .option("inferSchema",true)
                 .csv("data/week11/orders.csv") //returns dataframe
 
-  ordersDF.printSchema()
-  ordersDF.show()
-  val groupedDF = ordersDF.repartition(4)
-    .where("order_customer_id > 10000")
-    .select("order_id","order_customer_id")
-    .groupBy("order_customer_id")
-    .count()
-  groupedDF.show()
-
+  import spark.implicits._
+  val ts = unix_timestamp($"order_date", "yyyy:MM:dd HH:mm:ss").cast("timestamp")
+ val fomattedDF=  ordersDF.withColumn("order_date", ts)
+  val orderDs = fomattedDF.as[OrdersData]
+  orderDs.filter(x=>x.order_id<10) //with ds you can get the column names
+  orderDs.show()
   Logger.getLogger(getClass.getName).info("My application is successfully completed")
-  scala.io.StdIn.readLine()
+  //scala.io.StdIn.readLine()
   spark.stop()
 }

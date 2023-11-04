@@ -155,3 +155,41 @@ Dataset[Row] -> dataframe
 Dataset[Employee]-> dataset (compile time type safety)
 
 if we replace generic row with specific objet then it becomes dataset
+
+
+Dataframes are more preferred vs Datasets
+conversion takes lot of time (i.e Df to Ds) since u are converting to object
+Serialization -> convertinf data into binary form..
+when we are dealing with dataframes then the serialization is managed by tungsten
+binary format..
+when we are dealing with datasets then serialization is managed by java serialization(slow)
+
+using datasets will help us to cut down on developer mistakes but it comes with
+extra cost of casting and expensive serialization
+
+-----------------------------------------------------------------------
+
+Structred API :
+---------
+1. Read the data from a data source and create a dataframe/datasets
+2.external data source (mysql database,redshift,mongodb)
+internal datasource(hdfs,s3,azure,blob,google,storage)
+so we have flexibility in spark to create a dataframe directly from an external
+datasource
+spark is very good at processing but is not that efficient at ingesting data
+Spark gives you a jdbc connector to ingest the data from mysql database directly
+Sqoop to get the data to my hdfs and then i will load the data from hdfs to spark dataframe
+
+use tools like sqoop which are specially made for data ingestion to get your data from external data source to internal data source
+
+2.Performing a bunch of transformations and actions
+transformations/actions using higher level constructs
+
+3.writing the data to the target(Sink)
+internal/external
+
+-----------------------------------------------------------------------
+3 read modes
+1. Permissive (it sets all the fields to null when it encounters a corrupted reecord) ->Default
+2.DROPMALFORMED (will ignore the malformed records )
+3. FAILFAST (when ever a malformed record sis encountered a exception is raised)

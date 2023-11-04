@@ -1,12 +1,11 @@
 package com.g.app.week11
 
-import org.apache.commons.net.ntp.TimeStamp
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
 
-object DataFrameExample extends App {
+object DataFrameStandard extends App {
 
   Logger.getLogger("org").setLevel(Level.ERROR)
   val sparkConf = new SparkConf()
@@ -21,21 +20,22 @@ val spark = SparkSession.builder().
   val spark = SparkSession.builder()
     .config(sparkConf)
     .getOrCreate()
-  val ordersDF = spark.read
+ /* val ordersDF = spark.read
+                .format("Csv")
                 .option("header",true)
                 .option("inferSchema",true)
-                .csv("data/week11/orders.csv") //returns dataframe
+                .option("path","data/week11/orders.csv") //returns dataframe
+                .load()*/
 
+  val ordersDF = spark.read
+    .format("json")
+    .option("header", true)
+    .option("inferSchema", true)
+    .option("path", "data/week11/players.json") //returns dataframe
+    .option("mode","DROPMALFORMED") //drops bad data
+    .load()
   ordersDF.printSchema()
   ordersDF.show()
-  val groupedDF = ordersDF.repartition(4)
-    .where("order_customer_id > 10000")
-    .select("order_id","order_customer_id")
-    .groupBy("order_customer_id")
-    .count()
-  groupedDF.show()
-
-  Logger.getLogger(getClass.getName).info("My application is successfully completed")
   scala.io.StdIn.readLine()
   spark.stop()
 }
