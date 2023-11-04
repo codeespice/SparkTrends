@@ -193,3 +193,15 @@ internal/external
 1. Permissive (it sets all the fields to null when it encounters a corrupted reecord) ->Default
 2.DROPMALFORMED (will ignore the malformed records )
 3. FAILFAST (when ever a malformed record sis encountered a exception is raised)
+
+File Format
+--------
+1.Parquet -> default
+2.CSV
+3.json
+
+Schema
+--------
+1. Infer -> not preferred
+2.Implicit  -> parquet comes with implicit
+3.Explicit -> Case classes
