@@ -67,6 +67,91 @@ Top movies
 1.1000 people should have rated for that movie
 2.Average rating is greater than 4.5
 
+-----------------------------------------------------------------------
+Spark Eco system
+Structred API- dataframes,datasets and spark sql
+Spark streaming to process real time data
+-----------------------------------------------------------------------
 
 
+Spark Core
+-------
+rdd's
 
+Structure API's
+-----------
+Dataframes and datasets
+
+Dataframes -> structured , organized with column names
+            -> equivalent to tables in Database but present in partitions
+            ->richer optimizations are possible
+            -> rdd's are spark1 style
+            -> dataframes got greater support from spark2
+            -> both are merged in spark 2 into single API Datasets API
+            ->Use spark session instead of spark context
+
+Spark Session :
+            -> seperate context for each and everything earlier(spark context , hive context,sqlcontext)
+             now spark session handles all those  i.e unified entry point of spark
+             application
+             -> it provides a way to interact with various contexts
+             -> singleton object i.e one spark session for one application
+
+number of jobs = number of actions
+each job will have stages
+each stage will have tasks -> number of partitions
+Dataframe logic is more like SQL
+
+
+1. when ever we are working with dataframes or datasets we are dealing with higher level
+programming constructs..
+2.Your spark compiler(driver) converts high level code to low level code(executors execute low level code) and creates the plan
+-----------------------------------------------------------------------
+
+rdd vs dataframe vs dataset
+
+rdd -> low level code
+this is not developer friendly
+
+
+Dataframes
+------
+
+spark 1.3 version
+
+higher level construct and developer friendly
+
+challenges with dataframes
+------------------------------
+1. Dataframes do not offer strongly typed code ..
+type errorr wont be caught at compile time rather than we get surprise at run time
+2.developers felt that there flexibility has become limited
+
+3. Dataframes can be converted to Rdd i.e df.rdd -> gives more flexibility
+this conversion from dataframes to rdd is not seamless
+4.if we work with raw rdd by converting dataframe to rdd . we will miss out some of major
+optimization
+
+catalyst optimizer/tungsten engine
+
+DatasetAPI ( this address above issues)
+-------------
+spark 1.6
+
+1. Compile time safety
+2. We get more flexibility in terms of using lower level code
+3.conversion of dataframes to dataset is seamless
+4. we wont lose any of the optmimizations
+
+before spark2 both dataframes and datasets are 2 different things
+
+in spark2 they merged these 2 into single spark dataset API (Structured API)
+
+Dataframe is nothing but dataset[Row]
+Row is nothing but a generic type which will be bound at runtime
+incase of dataframes the data types are bound at run time
+
+Dataset[Row] -> dataframe
+Dataset[Employee]-> dataset (compile time type safety)
+
+if we replace generic row with specific objet then it becomes dataset
