@@ -205,3 +205,18 @@ Schema
 1. Infer -> not preferred
 2.Implicit  -> parquet comes with implicit
 3.Explicit -> Case classes
+
+
+Explicit Schema:
+--------
+1. Programatically
+2.DDL String
+
+Programatic approach
+--------
+1. Struct Type (List (struct Field("orderid",<Datatype>)
+
+
+DDL String
+--------
+val orderSchemaDDL = "orderid Int , orderdate String ..."

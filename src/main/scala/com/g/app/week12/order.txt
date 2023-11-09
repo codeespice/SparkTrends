@@ -1,0 +1,26 @@
+1.Writing output to sink
+2.spark file layout
+3.benifits of repartitions
+4.partitionby and bucketBy
+5.Saving file in various format
+
+
+SaveModes
+----
+1.append
+2.overrwrite
+3.errorIfExists
+4.ignore
+
+
+spark file layout
+----
+1. repartiton => number of repartions = number of files ( Not preferred)
+2.Partitioning and bucketing
+3.Sorted Data - sortBy
+
+Note : Number of output files is equal to number of partitions in your
+Dataframe
+
+repartition => increase parallelism
+
