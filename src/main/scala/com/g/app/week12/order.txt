@@ -77,3 +77,24 @@ bucket by works when we use save as table
 
 
     unstructured file -> rdd -> Transformations -> Structured Data (Dataframes )(.toDS)-> perform highlevel operations
+--------------------------------------------------------------------------------------------
+how to refer a column in a dataframe/dataset
+1.Column string
+ordersDf.select("order_id","order_status").show
+2.ColumnObject
+ordersDf.select(column("order_id"),col("order_status")).show
+column,col -> these are used in spark or pyspark
+$"order_customer_id" -> scala column notation
+
+
+column expression :
+----------------
+we cannot mix column strings with column expression nor we can mix column object with
+column expression
+
+column string -  select("order_id")
+column object - select (column("order_id"))
+column expression - concat(x,y)
+
+there is a way to convert -> expr
+
