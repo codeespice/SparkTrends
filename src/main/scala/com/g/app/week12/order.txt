@@ -16,11 +16,64 @@ SaveModes
 spark file layout
 ----
 1. repartiton => number of repartions = number of files ( Not preferred)
-2.Partitioning and bucketing
+2.Partitioning and bucketing -> is equivalent to your partitioning in hive
 3.Sorted Data - sortBy
 
 Note : Number of output files is equal to number of partitions in your
 Dataframe
 
 repartition => increase parallelism
+----
+Partitioning and bucketing
+----
+  ordersDF.write
+    .format("csv")
+    .mode(SaveMode.Overwrite)
+    .partitionBy("order_status")
+    .option("path","C:\\Users\\rkris\\Downloads\\sparkoutput")
+    .save()
 
+1.is equivalent to your partitioning in hive
+2.it provides partitioning pruning
+
+bucketby
+----
+bucketBy(4,"order_id")
+
+maxRecordsPerFile
+----
+option("maxRecordsPerFile",2000)
+
+
+Structured API Session:
+
+1. Sme times we have a requirement to save the data in persistent manner in the form
+of table.
+2.When data is stored in the form of table then we can connect tableu,power bi etc .. for reporting purpose
+
+
+table has 2 parts
+
+data                             metadata
+sparkwarehouse                  catalogue meta store
+spark.sql.warehouse.dir         in memory (on terminating application it is gone )
+                                we can use hive meta store to handle spark meta store
+bucket by works when we use save as table
+
+--------------------------------------------------------------------------------------------
+
+1.Dataframe reader - taking the data from source
+2.Transformations - to process our data
+3.Dataframe writer- to write your data to target location
+
+
+2.Transformations
+-------------
+1. Low level Transaformation -> map,groupbyKey(rdd)
+    you can use dataframes and datasets
+2.High level transformations ->
+    select ,where, groupby
+    these are supported by dataframes and datasets only
+
+
+    unstructured file -> rdd -> Transformations -> Structured Data (Dataframes )(.toDS)-> perform highlevel operations

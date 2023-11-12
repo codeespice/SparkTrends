@@ -2,11 +2,11 @@ package com.g.app.week12
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.sql.types._
+import org.apache.spark.sql.{SaveMode, SparkSession}
 
 
-object DataFrameWriteExample extends App {
+object DataFrameSqlExample extends App {
 
   Logger.getLogger("org").setLevel(Level.ERROR)
   val sparkConf = new SparkConf()
@@ -21,31 +21,23 @@ val spark = SparkSession.builder().
   val spark = SparkSession.builder()
     .config(sparkConf)
     .getOrCreate()
-  val orderSchema = StructType(List(
-    new StructField("orderid",IntegerType),
-    new StructField("orderdate",TimestampType),
-    new StructField("customerid",IntegerType),
-    new StructField("status",StringType)
-  ))
+
   val ordersDF = spark.read
                 .option("header",true)
-                .schema(orderSchema)
+                .option("inferSchema",true)
                 .csv("data/week11/orders.csv") //returns dataframe
 
-  ordersDF.printSchema()
-  ordersDF.show()
-  print("ordersdf has "+ordersDF.rdd.getNumPartitions)
-  ordersDF.repartition(4)
-  print("ordersdf has "+ordersDF.rdd.getNumPartitions)
-  ordersDF.write
+  ordersDF.createOrReplaceTempView("orders")
+  val resultDF = spark.sql("select order_status,count(*) as status_count from orders group by order_status")
+  resultDF.show()
+  spark.sql("create database if not exists retail")
+  resultDF.write
     .format("csv")
     .mode(SaveMode.Overwrite)
-    .partitionBy("status")
-    .option("maxRecordsPerFile",2000)
-    .option("path","C:\\Users\\rkris\\Downloads\\sparkoutput")
-    .save()
-
-
+    .bucketBy(4,"status_count")
+    .sortBy("status_count")
+    .saveAsTable("retail.orders1") //stores in spark-warehouse folder in the project
+spark.catalog.listTables("retail").show()
   Logger.getLogger(getClass.getName).info("My application is successfully completed")
   //scala.io.StdIn.readLine()
   spark.stop()
